@@ -3,6 +3,7 @@
 ## Overview
 
 **Alembic** is SQLAlchemy's database migration tool. It allows you to:
+
 - Track database schema changes over time
 - Create versioned migrations
 - Apply/rollback migrations safely
@@ -11,6 +12,7 @@
 ## Why Migrations Instead of `create_all()`?
 
 **Current approach (create_all):**
+
 ```python
 db_handler.init_db()  # Creates all tables, but:
 # ❌ Can't modify existing tables
@@ -20,6 +22,7 @@ db_handler.init_db()  # Creates all tables, but:
 ```
 
 **Migrations approach:**
+
 ```python
 alembic upgrade head  # Applies migrations incrementally:
 # ✅ Can modify existing tables
@@ -54,6 +57,7 @@ pip install alembic
 ```
 
 Add to `requirements.txt`:
+
 ```
 alembic
 ```
@@ -61,12 +65,14 @@ alembic
 ## Configuration Steps
 
 ### 1. Initialize Alembic
+
 ```bash
 cd FluxTrader
 alembic init alembic
 ```
 
 This creates:
+
 - `alembic/` directory with migration scripts
 - `alembic.ini` configuration file
 
@@ -180,6 +186,7 @@ def init_db(self, base=None):
 ```
 
 **Usage:**
+
 - Development: `db_handler.init_db()` (quick, but loses data)
 - Production: `alembic upgrade head` (safe, preserves data)
 
@@ -190,7 +197,7 @@ def init_db(self, base=None):
 def init_db(self, base=None):
     """Initialize database using Alembic migrations."""
     import subprocess
-    result = subprocess.run(['alembic', 'upgrade', 'head'], 
+    result = subprocess.run(['alembic', 'upgrade', 'head'],
                           capture_output=True, text=True)
     if result.returncode != 0:
         raise DatabaseError(f"Migration failed: {result.stderr}")
@@ -234,7 +241,7 @@ alembic heads
 """Initial schema
 
 Revision ID: 001
-Revises: 
+Revises:
 Create Date: 2025-01-01 12:00:00
 """
 from alembic import op
@@ -277,16 +284,16 @@ from config.database_handler import DatabaseConnectionHandler
 
 def create_app():
     app = Flask(__name__)
-    
+
     # Initialize database handler
     db_handler = DatabaseConnectionHandler()
-    
+
     # On startup, run migrations instead of create_all
     @app.before_first_request
     def init_database():
         import subprocess
         subprocess.run(['alembic', 'upgrade', 'head'])
-    
+
     return app
 ```
 
@@ -310,20 +317,22 @@ config.set_main_option('sqlalchemy.url', database_url)
 ## Summary
 
 **Current State:**
+
 - `Base` defined in `config/database_handler.py`
 - Models inherit from `Base`
 - `init_db()` creates all tables at once
 
 **With Migrations:**
+
 - Alembic tracks schema changes
 - Each change is a versioned migration file
 - Can apply/rollback changes incrementally
 - Production-safe way to manage database schema
 
 **Next Steps:**
+
 1. Install Alembic: `pip install alembic`
 2. Initialize: `alembic init alembic`
 3. Configure `alembic/env.py` to use your `Base`
 4. Create initial migration: `alembic revision --autogenerate -m "Initial schema"`
 5. Apply: `alembic upgrade head`
-

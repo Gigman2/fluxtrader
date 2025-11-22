@@ -3,11 +3,17 @@
 from datetime import datetime, timezone
 from uuid import uuid4
 
-from sqlalchemy import Boolean, Column, DateTime, Integer, String, Text
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
 
 # Import Base from database_handler
 from config.database_handler import Base
+
+
+STATUS_ACTIVE = "ACTIVE"
+STATUS_INACTIVE = "INACTIVE"
+STATUS_ORPHAN = "ORPHAN"
 
 
 class Channel(Base):
@@ -36,6 +42,9 @@ class Channel(Base):
     # Primary key - UUID type
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     
+    # Foreign key to Account (nullable to allow orphaned channels)
+    account_id = Column(UUID(as_uuid=True), ForeignKey("accounts.id", ondelete="SET NULL"), nullable=True, index=True)
+    
     # Channel information
     name = Column(String(255), nullable=False, index=True)
     description = Column(Text, nullable=True)
@@ -43,8 +52,9 @@ class Channel(Base):
     # Telegram information
     telegram_channel_id = Column(String(100), nullable=False, unique=True, index=True)
     
-    # Status
-    is_active = Column(Boolean, default=True, nullable=False)
+    # Status - can be "ACTIVE", "INACTIVE", "ORPHAN"
+    status = Column(String(20), default=STATUS_ACTIVE, nullable=False, index=True)
+    is_active = Column(Boolean, default=True, nullable=False)  # Keep for backward compatibility
     
     # Statistics
     signal_count = Column(Integer, default=0, nullable=False)
@@ -62,11 +72,14 @@ class Channel(Base):
         nullable=False,
     )
     
+    # Relationship back to Account
+    account = relationship("Account", back_populates="channels")
+    
     def __repr__(self):
         """String representation of the Channel."""
-        return f"<Channel(id={self.id}, name='{self.name}', is_active={self.is_active})>"
+        return f"<Channel(id={self.id}, name='{self.name}', status='{self.status}')>"
     
     def __str__(self):
         """Human-readable string representation."""
-        return f"Channel: {self.name} ({'Active' if self.is_active else 'Inactive'})"
+        return f"Channel: {self.name} (Status: {self.status})"
 
