@@ -43,6 +43,23 @@ class AccountSchema:
             'password': hashed_password,  # Store hashed password, not plain text
         }
     
+
+    @staticmethod
+    def validate_login(data: dict) -> dict:
+        """
+        Validate login data.
+        """
+        required_fields = ['username', 'password']
+        missing = [field for field in required_fields if field not in data]
+        if missing:
+            raise ValueError(f"Missing required fields: {', '.join(missing)}")
+
+        return {
+            'username': str(data['username']).strip(),
+            'password': str(data['password']),
+        }
+    
+
     @staticmethod
     def validate_update(data: dict) -> dict:
         """

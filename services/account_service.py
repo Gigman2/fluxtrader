@@ -8,6 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from models.account import Account
 from config.exceptions_handler import DatabaseError, ValidationError
 from utils.logger_utils import get_module_logger
+from utils.password_utils import verify_password
 
 logger = get_module_logger("services.account_service")
 
@@ -41,6 +42,15 @@ class AccountService:
             Account object or None if not found
         """
         return db.query(Account).filter(Account.id == account_id).first()
+
+
+    @staticmethod
+    def get_account_by_username(db: Session, username: str) -> Optional[Account]:
+        """
+        Get account by username.
+        """
+        return db.query(Account).filter(Account.username == username).first()
+        
     
     @staticmethod
     def create_account(db: Session, account_data: dict) -> Account:
@@ -153,3 +163,26 @@ class AccountService:
         
         return account.channels
 
+    @staticmethod
+    def login(db: Session, login_data: dict) -> Account:
+        """
+        Login to the system.
+        
+        Args:
+            db: Database session
+            login_data: Dictionary with login data
+            
+        Returns:
+            Account object
+        """
+        try:
+            logger.info(f"Logging in: {login_data}")
+            account = AccountService.get_account_by_username(db, login_data['username'])
+            if not account:
+                raise ValidationError("Account not found")
+            if not verify_password(account.password, login_data['password']):
+                raise ValidationError("Invalid password")
+            return account
+        except Exception as e:
+            logger.error(f"Failed to login: {e}", exc_info=True)
+            raise DatabaseError(f"Failed to login: {e}") from e

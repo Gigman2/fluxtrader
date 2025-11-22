@@ -30,7 +30,7 @@ class Account(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     
     # account information
-    username = Column(String(255), nullable=False)
+    username = Column(String(255), nullable=False, unique=True)
     password = Column(String(255), nullable=False)
 
     # trade parameters

@@ -194,6 +194,42 @@ def delete_account(account_id):
         }), 500
 
 
+@api_bp.route('/login', methods=['POST'])
+def login():
+    """Login to the system."""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({
+                'success': False,
+                'error': 'Request body is required'
+            }), 400
+        
+        # Validate input
+        validated_data = AccountSchema.validate_login(data)
+        
+        # Login via service
+        db = get_db()
+        account = AccountService.login(db, validated_data)
+        
+        return jsonify({
+            'success': True,
+            'data': AccountSchema.serialize(account),
+            'message': 'Login successful'
+        }), 200
+    
+    except ValidationError as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+    except Exception as e:
+        logger.error(f"Error logging in: {e}", exc_info=True)
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
 # @api_bp.route('/accounts/<uuid:account_id>/channels', methods=['GET'])
 # @db_session_required
 # def get_account_channels(account_id):
