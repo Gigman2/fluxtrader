@@ -7,7 +7,8 @@ def hash_password(password: str) -> str:
     """
     Hash a password using Werkzeug's secure password hashing.
     
-    Uses PBKDF2-HMAC-SHA256 by default, which is cryptographically secure.
+    Uses PBKDF2-HMAC-SHA256, which is cryptographically secure.
+    Explicitly uses PBKDF2 to avoid scrypt compatibility issues.
     
     **Salt is automatically generated and included in the hash!**
     - Each password gets a unique random salt
@@ -26,7 +27,9 @@ def hash_password(password: str) -> str:
         Hashed password string with embedded salt
         Format: pbkdf2:sha256:260000$<random_salt>$<hash>
     """
-    return generate_password_hash(password)
+    # Explicitly use PBKDF2 to avoid scrypt compatibility issues
+    # Some systems don't have OpenSSL 1.1.0+ required for scrypt
+    return generate_password_hash(password, method='pbkdf2:sha256')
 
 
 def verify_password(password_hash: str, password: str) -> bool:

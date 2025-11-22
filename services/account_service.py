@@ -7,6 +7,9 @@ from sqlalchemy.exc import IntegrityError
 
 from models.account import Account
 from config.exceptions_handler import DatabaseError, ValidationError
+from utils.logger_utils import get_module_logger
+
+logger = get_module_logger("services.account_service")
 
 
 class AccountService:
@@ -56,13 +59,15 @@ class AccountService:
             DatabaseError: If creation fails
         """
         try:
-            # Create account
+            logger.info(f"Creating account: {account_data}")
             account = Account(**account_data)
             db.add(account)
             db.commit()
             db.refresh(account)
+            logger.info(f"Account created successfully: {account.id} (username: {account.username})")
             return account
         except IntegrityError as e:
+            logger.error(f"Account with this username already exists: {e}", exc_info=True)
             db.rollback()
             raise DatabaseError("Account with this username already exists") from e
         except Exception as e:

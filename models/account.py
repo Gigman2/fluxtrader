@@ -34,13 +34,13 @@ class Account(Base):
     password = Column(String(255), nullable=False)
 
     # trade parameters
-    account_balance = Column(Numeric(20, 8), nullable=False)
-    risk_per_trade = Column(Numeric(5, 2), nullable=False)
-    max_drawdown = Column(Numeric(5, 2), nullable=False)
+    account_balance = Column(Numeric(20, 8), nullable=True, default=0.0)
+    risk_per_trade = Column(Numeric(5, 2), nullable=True, default=0.0)
+    max_drawdown = Column(Numeric(5, 2), nullable=True, default=0.0)
 
     # Integration
-    telegram_connected = Column(Boolean, default=False, nullable=False)
-    mt5_connected = Column(Boolean, default=False, nullable=False)
+    telegram_connected = Column(Boolean, nullable=True, default=False)
+    mt5_connected = Column(Boolean, nullable=True, default=False)
 
     # timestamps
     created_at = Column(DateTime(timezone=True), default=datetime.now(timezone.utc), nullable=False)

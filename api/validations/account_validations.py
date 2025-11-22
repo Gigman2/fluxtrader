@@ -3,6 +3,7 @@
 
 from utils.password_utils import hash_password
 
+import re
 
 class AccountSchema:
     """Schema for Account model."""
@@ -23,12 +24,22 @@ class AccountSchema:
         password = str(data['password'])
         if len(password) < 8:
             raise ValueError("Password must be at least 8 characters long")
+
+        # strip whitespace from username
+        username = str(data['username']).strip()
+        if not username:
+            raise ValueError("Username cannot be empty")
+
+        # validate username format
+        if not re.match(r'^[a-zA-Z0-9_]+$', username):
+            raise ValueError("Username can only contain letters, numbers, and underscores")
+
         
         # Hash the password before storing
         hashed_password = hash_password(password)
         
         return {
-            'username': str(data['username']),
+            'username': username,
             'password': hashed_password,  # Store hashed password, not plain text
         }
     
