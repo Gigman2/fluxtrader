@@ -1,18 +1,12 @@
-import os  
-from datetime import datetime
-from typing import Optional
-
-from flask import Flask
+from app import create_app
 from config import LoggingHandler, EnvHandler
 
-app = Flask(__name__)
-port = os.environ.get("PORT", 5000)
-debug = os.environ.get("DEBUG", "false").lower() == "true"
+app = create_app()  # Call the function to get Flask app instance
 
 if __name__ == "__main__":
     env_handler = EnvHandler()
     env_handler.validate_env()
-    env = env_handler.get_env("ENV")
+    env = env_handler.get_env("APP_ENV")
     debug = env_handler.get_env("DEBUG")
     port = env_handler.get_env("PORT")
 

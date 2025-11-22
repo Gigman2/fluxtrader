@@ -236,3 +236,6 @@ class LoggingHandler:
         except Exception as e:
             print(f"Failed to create error handler: {e}")
             return None
+
+
+__all__ = ["LoggingHandler"]
