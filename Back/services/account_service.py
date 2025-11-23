@@ -74,8 +74,13 @@ class AccountService:
             db.add(account)
             db.commit()
             db.refresh(account)
+
             logger.info(f"Account created successfully: {account.id} (username: {account.username})")
-            return account
+
+            from utils.jwt_utils import generate_token
+            token = generate_token(account.id, account.username)
+
+            return account, token
         except IntegrityError as e:
             logger.error(f"Account with this username already exists: {e}", exc_info=True)
             db.rollback()

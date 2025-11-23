@@ -12,20 +12,25 @@ import {
   ErrorAlert,
   SubmitButton,
 } from "@/components";
+import useAuth from "@/store/auth";
 
 const Signup: React.FC = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { setSession } = useAuth(["setSession"]);
   const navigate = useNavigate();
 
-  const { mutate: signup, isPending } = useMutationHandler("signup", {
+  const { mutate: signup, isPending } = useMutationHandler("accounts", {
     method: "POST",
-    onSuccess: () => {
+    contentType: "application/json",
+    onSuccess: (response: any) => {
+      setSession(response.data.token, response.data.user);
       navigate("/");
     },
-    onError: (err: Error) => {
-      setError(err.message || "Signup failed. Please try again.");
+    onError: (err: any) => {
+      const message = err.response?.data?.error || err.message;
+      setError(message || "Signup failed. Please try again.");
     },
   });
 

@@ -87,12 +87,15 @@ def create_account():
         
         # Create account via service
         db = get_db()
-        account = AccountService.create_account(db, validated_data)
+        account, token = AccountService.create_account(db, validated_data)
         
         logger.info(f"Account created successfully: {account.id} (username: {account.username})")
         return jsonify({
             'success': True,
-            'data': AccountSchema.serialize(account),
+            'data': {
+                'token': token,
+                'user': AccountSchema.serialize(account)
+            },
             'message': 'Account created successfully'
         }), 201
     
