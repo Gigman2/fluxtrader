@@ -9,6 +9,7 @@ import {
   TrendingUp,
   RefreshCw,
 } from "lucide-react";
+import MarketTicker from "@/components/MarketTicker";
 import {
   AreaChart,
   Area,
@@ -53,27 +54,6 @@ const equityData = [
   { time: "24:00", value: 10580 },
 ];
 
-const MarketTickerItem: React.FC<{
-  symbol: string;
-  price: string;
-  change: number;
-}> = ({ symbol, price, change }) => (
-  <div className="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm">
-    <span className="font-bold text-xs text-slate-900 dark:text-white">
-      {symbol}
-    </span>
-    <span className="font-mono text-xs text-slate-500">{price}</span>
-    <span
-      className={`text-[10px] font-medium ${
-        change >= 0 ? "text-emerald-500" : "text-rose-500"
-      }`}
-    >
-      {change >= 0 ? "+" : ""}
-      {change}%
-    </span>
-  </div>
-);
-
 const Dashboard: React.FC = () => {
   const [filter, setFilter] = useState<string>("ALL");
   const [highConfidenceOnly, setHighConfidenceOnly] = useState(false);
@@ -97,12 +77,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Top Bar: Market Context */}
-      <div className="flex overflow-x-auto gap-3 pb-2 no-scrollbar">
-        <MarketTickerItem symbol="XAUUSD" price="2045.50" change={0.45} />
-        <MarketTickerItem symbol="BTCUSD" price="64,520" change={-1.2} />
-        <MarketTickerItem symbol="EURUSD" price="1.0845" change={0.12} />
-        <MarketTickerItem symbol="US30" price="38,950" change={0.8} />
-      </div>
+      <MarketTicker symbols={["XAUUSD", "BTCUSD", "EURUSD", "GBPJPY"]} />
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

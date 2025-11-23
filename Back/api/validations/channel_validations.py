@@ -23,20 +23,20 @@ class ChannelSchema:
             'description': data.get('description'),
             'telegram_channel_id': str(data['telegram_channel_id']),
             'status': data.get('status', STATUS_ACTIVE),
-            'is_active': data.get('is_active', True),
+            'connection_status': data.get('connection_status', "disconnected"),
         }
         
         # Handle account_id - keep as string, will be converted to UUID in route
         if 'account_id' in data and data['account_id']:
             result['account_id'] = data['account_id']
-        
+
         return result
     
     @staticmethod
     def validate_update(data: dict) -> dict:
         """Validate channel update data."""
         allowed_fields = ['name', 'description', 'telegram_channel_id', 'account_id', 
-                         'status', 'is_active', 'signal_count']
+                         'status', 'connection_status', 'signal_count']
         return {k: v for k, v in data.items() if k in allowed_fields}
     
     @staticmethod
@@ -49,7 +49,7 @@ class ChannelSchema:
             'description': channel.description,
             'telegram_channel_id': channel.telegram_channel_id,
             'status': channel.status,
-            'is_active': channel.is_active,
+            'connection_status': channel.connection_status,
             'signal_count': channel.signal_count,
             'created_at': channel.created_at.isoformat() if channel.created_at else None,
             'updated_at': channel.updated_at.isoformat() if channel.updated_at else None,

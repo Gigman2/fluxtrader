@@ -71,6 +71,12 @@ class EnvHandler:
             "key": "JWT_EXPIRATION_HOURS",
             "required": True,
             "type": int,
+        },
+        {
+            "key": "TWELVE_DATA_API_KEY",
+            "required": False,
+            "type": str,
+            "default": None,
         }
     ]
 

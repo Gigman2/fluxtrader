@@ -9,8 +9,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
-import Channels from "./pages/Channels";
-import ChannelDetails from "./pages/ChannelDetails";
+
+// Channels
+import Channels from "./pages/Channels/index";
+import ChannelDetails from "./pages/Channels/ChannelDetails";
+
+// Templates
 import TemplateBuilder from "./pages/TemplateBuilder";
 import Analytics from "./pages/Analytics";
 import Signals from "./pages/Signals";

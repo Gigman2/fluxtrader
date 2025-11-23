@@ -47,19 +47,18 @@ class Channel(Base):
     
     # Channel information
     name = Column(String(255), nullable=False, index=True)
-    description = Column(Text, nullable=True)
-    
-    # Telegram information
     telegram_channel_id = Column(String(100), nullable=False, unique=True, index=True)
     
     # Status - can be "ACTIVE", "INACTIVE", "ORPHAN"
     status = Column(String(20), default=STATUS_ACTIVE, nullable=False, index=True)
-    is_active = Column(Boolean, default=True, nullable=False)  # Keep for backward compatibility
+    connection_status = Column(String(20), default="disconnected", nullable=False)  # "connected", "disconnected", "error"
+    connection_error = Column(Text, nullable=True)
     
     # Statistics
     signal_count = Column(Integer, default=0, nullable=False)
     
     # Timestamps
+    last_active_at = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),

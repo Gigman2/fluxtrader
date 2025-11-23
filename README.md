@@ -199,6 +199,10 @@ FRONTEND_URL=http://localhost:5034,http://localhost:3000
 # Logging
 LOG_FORMAT=text
 LOG_LEVEL=INFO
+
+# Market Data API (Optional - for real-time market data)
+# Get your free API key from https://twelvedata.com
+TWELVE_DATA_API_KEY=your-twelve-data-api-key-here
 ```
 
 ### Frontend (.env)

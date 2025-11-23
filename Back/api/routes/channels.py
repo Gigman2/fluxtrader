@@ -3,42 +3,36 @@
 from flask import request, jsonify
 from uuid import UUID
 
+from utils.auth_utils import auth_required, get_current_account_id
 from api import api_bp
-from api.utils import get_db, db_session_required
-from api.schemas import ChannelSchema
+from api.validations.channel_validations import ChannelSchema
+
+from utils import get_db, db_session_required, get_module_logger
 from services.channel_service import ChannelService
 from config.exceptions_handler import DatabaseError, ValidationError
 
 
-@api_bp.route('/channels', methods=['GET'])
+logger = get_module_logger("api.routes.channels")
+
+@api_bp.route('/accounts/channels', methods=['GET'])
 @db_session_required
-def list_channels():
-    """Get all channels with optional filtering."""
+@auth_required
+def list_account_channels():
+    """Get all channels for the authenticated account."""
     try:
         db = get_db()
         
         # Parse query parameters
         status = request.args.get('status')
-        account_id_str = request.args.get('account_id')
-        orphaned = request.args.get('orphaned', '').lower() == 'true'
+        account_id = get_current_account_id()
         
-        # Convert account_id to UUID if provided
-        account_id = None
-        if account_id_str:
-            try:
-                account_id = UUID(account_id_str)
-            except ValueError:
-                return jsonify({
-                    'success': False,
-                    'error': 'Invalid account_id format'
-                }), 400
+
         
         # Get channels via service
         channels = ChannelService.get_all_channels(
             db,
             status=status,
             account_id=account_id,
-            orphaned_only=orphaned
         )
         
         return jsonify({
@@ -80,6 +74,7 @@ def get_channel(channel_id):
 
 @api_bp.route('/channels', methods=['POST'])
 @db_session_required
+@auth_required
 def create_channel():
     """Create a new channel."""
     try:
@@ -92,16 +87,10 @@ def create_channel():
         
         # Validate input
         validated_data = ChannelSchema.validate_create(data)
+
+        current_account_id = get_current_account_id()
         
-        # Convert account_id to UUID if provided
-        if 'account_id' in validated_data and validated_data['account_id']:
-            try:
-                validated_data['account_id'] = UUID(validated_data['account_id'])
-            except ValueError:
-                return jsonify({
-                    'success': False,
-                    'error': 'Invalid account_id format'
-                }), 400
+        validated_data['account_id'] = current_account_id
         
         # Create channel via service
         db = get_db()
@@ -129,6 +118,7 @@ def create_channel():
             'error': str(e)
         }), 409
     except Exception as e:
+        logger.error(f"Error creating channel: {e}", exc_info=True)
         return jsonify({
             'success': False,
             'error': str(e)
@@ -210,73 +200,3 @@ def delete_channel(channel_id):
             'success': False,
             'error': str(e)
         }), 500
-
-
-@api_bp.route('/channels/orphaned', methods=['GET'])
-@db_session_required
-def list_orphaned_channels():
-    """Get all orphaned channels."""
-    try:
-        db = get_db()
-        channels = ChannelService.get_orphaned_channels(db)
-        
-        return jsonify({
-            'success': True,
-            'data': [ChannelSchema.serialize(channel) for channel in channels],
-            'count': len(channels)
-        }), 200
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
-
-
-@api_bp.route('/channels/<uuid:channel_id>/reassign', methods=['POST'])
-@db_session_required
-def reassign_channel(channel_id):
-    """Reassign an orphaned channel to a new account."""
-    try:
-        data = request.get_json()
-        if not data or 'account_id' not in data:
-            return jsonify({
-                'success': False,
-                'error': 'account_id is required'
-            }), 400
-        
-        try:
-            account_id = UUID(data['account_id'])
-        except ValueError:
-            return jsonify({
-                'success': False,
-                'error': 'Invalid account_id format'
-            }), 400
-        
-        # Reassign channel via service
-        db = get_db()
-        channel = ChannelService.reassign_orphaned_channel(db, channel_id, account_id)
-        
-        return jsonify({
-            'success': True,
-            'data': ChannelSchema.serialize(channel),
-            'message': 'Channel reassigned successfully'
-        }), 200
-    
-    except ValidationError as e:
-        error_msg = str(e)
-        if 'not found' in error_msg.lower():
-            status_code = 404
-        elif 'not orphaned' in error_msg.lower():
-            status_code = 400
-        else:
-            status_code = 400
-        return jsonify({
-            'success': False,
-            'error': error_msg
-        }), status_code
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
-
