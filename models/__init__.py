@@ -1,4 +1,4 @@
-"""Models package for FluxTrader."""
+"""Models package for SignalFlux."""
 
 from .channel import Channel
 from .account import Account

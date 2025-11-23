@@ -1,4 +1,4 @@
-"""Utility functions for FluxTrader."""
+"""Utility functions for SignalFlux."""
 
 from .password_utils import hash_password, verify_password
 from .database_utils import get_db, close_db, db_session_required

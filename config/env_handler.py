@@ -18,19 +18,19 @@ class EnvHandler:
             "key": "POSTGRES_DB",
             "required": False,
             "type": str,
-            "default": "fluxitrader_db",
+            "default": "signalflex_db",
         },
         {
             "key": "POSTGRES_USER",
             "required": False,
             "type": str,
-            "default": "fluxitrader_user",
+            "default": "signalflex_user",
         },
         {
             "key": "POSTGRES_PASSWORD",
             "required": False,
             "type": str,
-            "default": "fluxitrader_password",
+            "default": "signalflex_password",
         },
         {
             "key": "POSTGRES_HOST",

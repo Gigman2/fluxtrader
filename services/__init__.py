@@ -1,4 +1,4 @@
-"""Services package for FluxTrader business logic."""
+"""Services package for SignalFlux business logic."""
 
 from .account_service import AccountService
 from .channel_service import ChannelService

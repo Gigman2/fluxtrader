@@ -12,8 +12,8 @@ def get_logger(name: Optional[str] = None):
     Get or create logger instance.
     
     Args:
-        name: Logger name (e.g., "fluxitrader.api.accounts")
-              If None, uses "fluxitrader"
+        name: Logger name (e.g., "signalflex.api.accounts")
+              If None, uses "signalflex"
     
     Returns:
         Logger instance or None if initialization fails
@@ -22,7 +22,7 @@ def get_logger(name: Optional[str] = None):
     
     if _logger_instance is None:
         logging_handler = LoggingHandler()
-        _logger_instance = logging_handler.get_logger(name or "fluxitrader")
+        _logger_instance = logging_handler.get_logger(name or "signalflex")
     
     return _logger_instance
 
@@ -35,9 +35,9 @@ def get_module_logger(module_name: str):
         module_name: Module name (e.g., "api.accounts", "services.account_service")
     
     Returns:
-        Logger instance with name "fluxitrader.{module_name}"
+        Logger instance with name "signalflex.{module_name}"
     """
-    full_name = f"fluxitrader.{module_name}"
+    full_name = f"signalflex.{module_name}"
     logging_handler = LoggingHandler()
     return logging_handler.get_logger(full_name)
 

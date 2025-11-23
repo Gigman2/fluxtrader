@@ -216,7 +216,7 @@ Complete workflow:
 
 if __name__ == "__main__":
     print("\n" + "=" * 70)
-    print("FluxTrader Database Handler Examples")
+    print("SignalFlux Database Handler Examples")
     print("=" * 70)
     
     # Example 1: Show Base.metadata

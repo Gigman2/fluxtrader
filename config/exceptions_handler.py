@@ -1,8 +1,8 @@
 from typing import Optional
 
 
-class FluxTraderException(Exception):
-    """Base exception for the flux trader application"""
+class SignalFluxException(Exception):
+    """Base exception for the SignalFlux application"""
 
     def __init__(self, message: str, code: str = "UNKNOWN_ERROR"):
         self.message = message
@@ -10,21 +10,21 @@ class FluxTraderException(Exception):
         super().__init__(self.message)
 
 
-class ConfigurationError(FluxTraderException):
+class ConfigurationError(SignalFluxException):
     """Exception raised for configuration errors"""
 
     def __init__(self, message: str):
         super().__init__(message, "CONFIGURATION_ERROR")
 
 
-class DatabaseError(FluxTraderException):
+class DatabaseError(SignalFluxException):
     """Exception raised for database errors"""
 
     def __init__(self, message: str):
         super().__init__(message, "DATABASE_ERROR")
 
 
-class ValidationError(FluxTraderException):
+class ValidationError(SignalFluxException):
     """Exception raised for validation errors"""
 
     def __init__(self, message: str, field: Optional[str] = None):
@@ -34,7 +34,7 @@ class ValidationError(FluxTraderException):
 
 
 __all__ = [
-    "FluxTraderException",
+    "SignalFluxException",
     "ConfigurationError",
     "DatabaseError",
     "ValidationError",

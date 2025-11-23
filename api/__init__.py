@@ -1,4 +1,4 @@
-"""API package for FluxTrader."""
+"""API package for SignalFlux."""
 
 from flask import Blueprint
 

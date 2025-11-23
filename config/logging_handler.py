@@ -1,4 +1,4 @@
-"""Logging handler for FluxTrader."""
+"""Logging handler for SignalFlux."""
 
 import json
 import logging
@@ -48,7 +48,7 @@ class JSONFormatter(logging.Formatter):
 
 class LoggingHandler:
     LOG_FILE_MAX_BYTES = 10 * 1024 * 1024  # 10MB
-    LOG_FILE_PATH = Path("logs/fluxitrader.log")
+    LOG_FILE_PATH = Path("logs/signalflex.log")
     LOG_FILE_BACKUP_COUNT = 5
     
     # Log level file configurations
@@ -97,14 +97,14 @@ class LoggingHandler:
         Create and return logger with handlers for different log levels.
         
         Args:
-            name: Logger name (default: "fluxitrader"). Use module names like
-                  "fluxitrader.database" or "fluxitrader.api" for separate loggers.
+            name: Logger name (default: "signalflex"). Use module names like
+                  "signalflex.database" or "signalflex.api" for separate loggers.
         
         Returns:
             Configured logger instance
         """
         try:
-            logger_name = name or "fluxitrader"
+            logger_name = name or "signalflex"
             logger = logging.getLogger(logger_name)
             logger.setLevel(self.log_level)
             logger.handlers.clear()
