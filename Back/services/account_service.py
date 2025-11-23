@@ -164,7 +164,7 @@ class AccountService:
         return account.channels
 
     @staticmethod
-    def login(db: Session, login_data: dict) -> Account:
+    def login(db: Session, login_data: dict) -> tuple[Account, str]:
         """
         Login to the system.
         
@@ -173,7 +173,10 @@ class AccountService:
             login_data: Dictionary with login data
             
         Returns:
-            Account object
+            Tuple of (Account object, JWT token)
+            
+        Raises:
+            ValidationError: If credentials are invalid
         """
         try:
             logger.info(f"Logging in: {login_data}")
@@ -182,7 +185,15 @@ class AccountService:
                 raise ValidationError("Account not found")
             if not verify_password(account.password, login_data['password']):
                 raise ValidationError("Invalid password")
-            return account
+            
+            # Generate JWT token
+            from utils.jwt_utils import generate_token
+            token = generate_token(account.id, account.username)
+            
+            logger.info(f"Login successful for account: {account.id} (username: {account.username})")
+            return account, token
+        except ValidationError:
+            raise  # Re-raise validation errors as-is
         except Exception as e:
             logger.error(f"Failed to login: {e}", exc_info=True)
             raise DatabaseError(f"Failed to login: {e}") from e

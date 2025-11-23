@@ -61,6 +61,22 @@ class EnvHandler:
             "required": False,
             "type": bool,
             "default": False,
+        },
+        {
+            "key": "FRONTEND_URL",
+            "required": False,
+            "type": str,
+            "default": "http://localhost:3000",
+        },
+        {
+            "key": "JWT_SECRET_KEY",
+            "required": True,
+            "type": str,
+        },
+        {
+            "key": "JWT_EXPIRATION_HOURS",
+            "required": True,
+            "type": int,
         }
     ]
 

@@ -195,6 +195,7 @@ def delete_account(account_id):
 
 
 @api_bp.route('/login', methods=['POST'])
+@db_session_required
 def login():
     """Login to the system."""
     try:
@@ -210,11 +211,16 @@ def login():
         
         # Login via service
         db = get_db()
-        account = AccountService.login(db, validated_data)
+        account, token = AccountService.login(db, validated_data)
+        
+        account_data = AccountSchema.serialize(account)
         
         return jsonify({
             'success': True,
-            'data': AccountSchema.serialize(account),
+            'data': {
+                'token': token,
+                'user': account_data
+            },
             'message': 'Login successful'
         }), 200
     
