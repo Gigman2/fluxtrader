@@ -42,6 +42,7 @@ SignalFlux follows a clean architecture with clear separation of concerns:
 ## 🛠️ Tech Stack
 
 ### Backend
+
 - **Python 3.9+**
 - **Flask** - Web framework
 - **SQLAlchemy 2.0** - ORM
@@ -51,6 +52,7 @@ SignalFlux follows a clean architecture with clear separation of concerns:
 - **Flask-CORS** - Cross-origin resource sharing
 
 ### Frontend
+
 - **React 19** - UI library
 - **TypeScript** - Type safety
 - **Vite** - Build tool
@@ -64,33 +66,26 @@ SignalFlux follows a clean architecture with clear separation of concerns:
 ## 📁 Project Structure
 
 ```
-trader/
-├── SignalFlux/
-│   ├── Back/                    # Backend API
-│   │   ├── api/                 # API routes and validations
-│   │   ├── config/              # Configuration handlers
-│   │   ├── models/               # SQLAlchemy models
-│   │   ├── services/             # Business logic
-│   │   ├── utils/                # Utilities (JWT, password, etc.)
-│   │   ├── alembic/             # Database migrations
-│   │   ├── main.py              # Application entry point
-│   │   ├── requirements.txt     # Python dependencies
-│   │   └── run.sh               # Run script
-│   │
-│   └── Front/                    # Frontend application
-│       ├── api/                  # API client & hooks
-│       ├── components/           # React components
-│       ├── pages/                # Page components
-│       ├── store/                # State management
-│       ├── utilities/            # Utility functions
-│       ├── package.json         # Node dependencies
-│       └── vite.config.ts       # Vite configuration
-│
-└── FluxTrader-Docs/              # Documentation
-    ├── API_DOCUMENTATION.md
-    ├── ARCHITECTURE.md
-    ├── DATABASE_ARCHITECTURE.md
-    └── MIGRATIONS_GUIDE.md
+ SignalFlux/
+ ├── Back/                    # Backend API
+ │   ├── api/                 # API routes and validations
+ │   ├── config/              # Configuration handlers
+ │   ├── models/               # SQLAlchemy models
+ │   ├── services/             # Business logic
+ │   ├── utils/                # Utilities (JWT, password, etc.)
+ │   ├── alembic/             # Database migrations
+ │   ├── main.py              # Application entry point
+ │   ├── requirements.txt     # Python dependencies
+ │   └── run.sh               # Run script
+ │
+ └── Front/                    # Frontend application
+     ├── api/                  # API client & hooks
+     ├── components/           # React components
+     ├── pages/                # Page components
+     ├── store/                # State management
+     ├── utilities/            # Utility functions
+     ├── package.json         # Node dependencies
+     └── vite.config.ts       # Vite configuration
 ```
 
 ## 🚀 Getting Started
@@ -98,35 +93,39 @@ trader/
 ### Prerequisites
 
 - **Python 3.9+**
-- **Node.js 18+** and npm
 - **PostgreSQL 12+**
 - **Git**
 
 ### Backend Setup
 
 1. **Navigate to backend directory:**
+
    ```bash
    cd SignalFlux/Back
    ```
 
 2. **Create and activate virtual environment:**
+
    ```bash
    python3 -m venv .venv
    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
    ```
 
 3. **Install dependencies:**
+
    ```bash
    pip install -r requirements.txt
    ```
 
 4. **Set up environment variables:**
+
    ```bash
    cp .env.example .env
    # Edit .env with your configuration
    ```
 
 5. **Configure database:**
+
    - Update PostgreSQL connection details in `.env`
    - Run migrations:
      ```bash
@@ -134,6 +133,7 @@ trader/
      ```
 
 6. **Run the backend:**
+
    ```bash
    ./run.sh
    # Or manually:
@@ -145,23 +145,27 @@ trader/
 ### Frontend Setup
 
 1. **Navigate to frontend directory:**
+
    ```bash
    cd SignalFlux/Front
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables:**
    Create a `.env` file:
+
    ```env
    VITE_BASE_API_URL=http://localhost:5033/api/v1
    VITE_ENVIRONMENT=development
    ```
 
 4. **Start development server:**
+
    ```bash
    npm run dev
    ```
@@ -209,6 +213,7 @@ VITE_ENVIRONMENT=development
 The API follows RESTful conventions and returns JSON responses.
 
 ### Base URL
+
 ```
 http://localhost:5033/api/v1
 ```
@@ -216,6 +221,7 @@ http://localhost:5033/api/v1
 ### Authentication
 
 Most endpoints require authentication via JWT token in the Authorization header:
+
 ```
 Authorization: Bearer <token>
 ```
@@ -223,16 +229,19 @@ Authorization: Bearer <token>
 ### Endpoints
 
 #### Authentication
+
 - `POST /login` - Login and get JWT token
 - `POST /accounts` - Create new account (signup)
 
 #### Accounts
+
 - `GET /accounts` - List all accounts
 - `GET /accounts/{id}` - Get account by ID
 - `PUT /accounts/{id}` - Update account
 - `DELETE /accounts/{id}` - Delete account
 
 #### Channels
+
 - `GET /channels` - List all channels
 - `GET /channels/{id}` - Get channel by ID
 - `POST /channels` - Create channel
@@ -279,12 +288,14 @@ For more details, see [FluxTrader-Docs/MIGRATIONS_GUIDE.md](./FluxTrader-Docs/MI
 ### Running Tests
 
 **Backend:**
+
 ```bash
 cd SignalFlux/Back
 pytest
 ```
 
 **Frontend:**
+
 ```bash
 cd SignalFlux/Front
 npm test
@@ -302,9 +313,11 @@ docker-compose up -d
 ## 📝 Scripts
 
 ### Backend
+
 - `./run.sh` - Run the Flask application (handles venv activation)
 
 ### Frontend
+
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
@@ -343,4 +356,3 @@ For issues and questions, please open an issue in the repository.
 ## 🙏 Acknowledgments
 
 Built with modern web technologies and best practices for scalability and maintainability.
-
