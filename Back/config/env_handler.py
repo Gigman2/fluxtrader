@@ -16,31 +16,27 @@ class EnvHandler:
         },
         {
             "key": "POSTGRES_DB",
-            "required": False,
+            "required": True,
             "type": str,
-            "default": "signalflex_db",
         },
         {
             "key": "POSTGRES_USER",
-            "required": False,
+            "required": True,
             "type": str,
-            "default": "signalflex_user",
         },
         {
             "key": "POSTGRES_PASSWORD",
-            "required": False,
+            "required": True,
             "type": str,
-            "default": "signalflex_password",
         },
         {
             "key": "POSTGRES_HOST",
-            "required": False,
+            "required": True,
             "type": str,
-            "default": "localhost",
         },
         {
             "key": "POSTGRES_PORT",
-            "required": False,
+            "required": True,
             "type": int,
             "default": 5432,
         },
@@ -64,9 +60,8 @@ class EnvHandler:
         },
         {
             "key": "FRONTEND_URL",
-            "required": False,
+            "required": True,
             "type": str,
-            "default": "http://localhost:3000",
         },
         {
             "key": "JWT_SECRET_KEY",

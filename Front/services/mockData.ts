@@ -1,50 +1,50 @@
-import { Channel, Signal, SignalStatus, SignalType, Template } from '../types';
+import { Channel, Signal, SignalStatus, SignalType, Template } from "../types";
 
 export const MOCK_CHANNELS: Channel[] = [
   {
-    id: '1',
-    name: 'Gold Scalper Elite',
-    username: '@gold_scalps',
-    status: 'connected',
+    id: "1",
+    name: "Gold Scalper Elite",
+    username: "@gold_scalps",
+    status: "connected",
     signalCount: 124,
-    lastActive: '2 mins ago'
+    lastActive: "2 mins ago",
   },
   {
-    id: '2',
-    name: 'Crypto Whales',
-    username: '@cryptowhales_vip',
-    status: 'connected',
+    id: "2",
+    name: "Crypto Whales",
+    username: "@cryptowhales_vip",
+    status: "connected",
     signalCount: 892,
-    lastActive: '1 hour ago'
+    lastActive: "1 hour ago",
   },
   {
-    id: '3',
-    name: 'Forex Kings',
-    username: '@fx_kings_official',
-    status: 'error',
+    id: "3",
+    name: "Forex Kings",
+    username: "@fx_kings_official",
+    status: "error",
     signalCount: 45,
-    lastActive: '2 days ago'
-  }
+    lastActive: "2 days ago",
+  },
 ];
 
 export const MOCK_SIGNALS: Signal[] = [
   {
-    id: '101',
-    channelId: '1',
-    symbol: 'XAUUSD',
+    id: "101",
+    channelId: "1",
+    symbol: "XAUUSD",
     type: SignalType.BUY,
-    entry: 2045.50,
-    sl: 2040.00,
-    tp: [2050.00, 2055.00],
+    entry: 2045.5,
+    sl: 2040.0,
+    tp: [2050.0, 2055.0],
     status: SignalStatus.ACTIVE,
     timestamp: new Date().toISOString(),
     confidence: 0.98,
-    originalMessage: "GOLD BUY NOW @ 2045.50\nSL: 2040\nTP1: 2050\nTP2: 2055"
+    originalMessage: "GOLD BUY NOW @ 2045.50\nSL: 2040\nTP1: 2050\nTP2: 2055",
   },
   {
-    id: '102',
-    channelId: '2',
-    symbol: 'BTCUSD',
+    id: "102",
+    channelId: "2",
+    symbol: "BTCUSD",
     type: SignalType.SHORT,
     entry: 64500,
     sl: 65200,
@@ -53,12 +53,12 @@ export const MOCK_SIGNALS: Signal[] = [
     timestamp: new Date(Date.now() - 3600000).toISOString(),
     pnl: 4.2,
     confidence: 0.95,
-    originalMessage: "Short BTC/USD\nEntry: 64500\nStop: 65200\nTarget: 63000"
+    originalMessage: "Short BTC/USD\nEntry: 64500\nStop: 65200\nTarget: 63000",
   },
   {
-    id: '103',
-    channelId: '2',
-    symbol: 'ETHUSD',
+    id: "103",
+    channelId: "2",
+    symbol: "ETHUSD",
     type: SignalType.LONG,
     entry: 3400,
     sl: 3200,
@@ -67,12 +67,12 @@ export const MOCK_SIGNALS: Signal[] = [
     timestamp: new Date(Date.now() - 7200000).toISOString(),
     pnl: -2.5,
     confidence: 0.88,
-    originalMessage: "Long ETH\nEntry region: 3400-3420\nSL 3200\nTP 3600"
+    originalMessage: "Long ETH\nEntry region: 3400-3420\nSL 3200\nTP 3600",
   },
   {
-    id: '104',
-    channelId: '1',
-    symbol: 'US30',
+    id: "104",
+    channelId: "1",
+    symbol: "US30",
     type: SignalType.BUY,
     entry: 38500,
     sl: 38400,
@@ -80,32 +80,62 @@ export const MOCK_SIGNALS: Signal[] = [
     status: SignalStatus.PENDING,
     timestamp: new Date(Date.now() - 900000).toISOString(),
     confidence: 0.92,
-    originalMessage: "US30 BUY LIMIT @ 38500\nSL 100 pips\nTP Open"
-  }
+    originalMessage: "US30 BUY LIMIT @ 38500\nSL 100 pips\nTP Open",
+  },
 ];
 
 export const MOCK_TEMPLATES: Template[] = [
   {
-    id: 't1',
-    channelId: '1',
-    name: 'Standard Gold Signal',
+    id: "t1",
+    channelId: "1",
+    name: "Standard Gold Signal",
     isAutoDetect: true,
-    exampleMessage: 'GOLD BUY NOW @ 2045.50\nSL: 2040\nTP1: 2050',
+    exampleMessage: "GOLD BUY NOW @ 2045.50\nSL: 2040\nTP1: 2050",
     fields: [
-      { id: 'f1', name: 'Symbol', key: 'symbol', pattern: 'GOLD', required: true },
-      { id: 'f2', name: 'Entry', key: 'entry', pattern: '@ ([0-9.]+)', required: true },
-      { id: 'f3', name: 'SL', key: 'sl', pattern: 'SL: ([0-9.]+)', required: true }
-    ]
+      {
+        id: "f1",
+        name: "Symbol",
+        key: "symbol",
+        pattern: "GOLD",
+        required: true,
+      },
+      {
+        id: "f2",
+        name: "Entry",
+        key: "entry",
+        pattern: "@ ([0-9.]+)",
+        required: true,
+      },
+      {
+        id: "f3",
+        name: "SL",
+        key: "sl",
+        pattern: "SL: ([0-9.]+)",
+        required: true,
+      },
+    ],
   },
   {
-    id: 't2',
-    channelId: '2',
-    name: 'Crypto Short Format',
+    id: "t2",
+    channelId: "2",
+    name: "Crypto Short Format",
     isAutoDetect: true,
-    exampleMessage: 'Short BTC/USD\nEntry: 64500\nStop: 65200',
+    exampleMessage: "Short BTC/USD\nEntry: 64500\nStop: 65200",
     fields: [
-      { id: 'f4', name: 'Symbol', key: 'symbol', pattern: 'Short ([A-Z/]+)', required: true },
-      { id: 'f5', name: 'Entry', key: 'entry', pattern: 'Entry: ([0-9.]+)', required: true }
-    ]
-  }
+      {
+        id: "f4",
+        name: "Symbol",
+        key: "symbol",
+        pattern: "Short ([A-Z/]+)",
+        required: true,
+      },
+      {
+        id: "f5",
+        name: "Entry",
+        key: "entry",
+        pattern: "Entry: ([0-9.]+)",
+        required: true,
+      },
+    ],
+  },
 ];
