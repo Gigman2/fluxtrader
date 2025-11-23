@@ -38,7 +38,6 @@ class EnvHandler:
             "key": "POSTGRES_PORT",
             "required": True,
             "type": int,
-            "default": 5432,
         },
         {
             "key": "LOG_FORMAT",
