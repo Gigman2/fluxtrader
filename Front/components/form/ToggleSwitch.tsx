@@ -41,9 +41,9 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
         }`}
       >
         <span
-          className={`absolute left-0 inline-block w-6 h-6 bg-white dark:bg-slate-900 border-2 rounded-full shadow transform transition-transform ${
+          className={`absolute left-0 top-0 inline-block w-6 h-6 bg-white dark:bg-slate-900 border-2 rounded-full shadow transform transition-transform ${
             checked
-              ? "translate-x-6 border-slate-900 dark:border-white"
+              ? "translate-x-3 border-slate-900 dark:border-white"
               : "translate-x-0 border-slate-300 dark:border-slate-700"
           }`}
         ></span>
@@ -53,4 +53,3 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
 };
 
 export default ToggleSwitch;
-

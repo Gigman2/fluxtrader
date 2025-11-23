@@ -1,6 +1,7 @@
 export interface IUser {
   id: string;
   username: string;
+  email: string;
   password: string;
   account_balance: number;
   risk_per_trade: number;

@@ -1,10 +1,11 @@
 """Account API routes - handles HTTP request/response only."""
 
-from flask import request, jsonify
+from flask import request, jsonify, g
 from uuid import UUID
 
 from utils.database_utils import get_db, db_session_required
 from utils.logger_utils import get_module_logger
+from utils.auth_utils import auth_required, get_current_account_id
 
 from api import api_bp
 from api.validations.account_validations import AccountSchema
@@ -234,6 +235,152 @@ def login():
         }), 400
     except Exception as e:
         logger.error(f"Error logging in: {e}", exc_info=True)
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
+@api_bp.route('/password-reset/request', methods=['POST'])
+@db_session_required
+def request_password_reset():
+    """Request password reset - sends reset email."""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({
+                'success': False,
+                'error': 'Request body is required'
+            }), 400
+        
+        # Validate input
+        validated_data = AccountSchema.validate_password_reset_request(data)
+        
+        # Request password reset via service
+        db = get_db()
+        AccountService.request_password_reset(db, validated_data['email'])
+        
+        # Always return success (security best practice - don't reveal if email exists)
+        return jsonify({
+            'success': True,
+            'message': 'If an account with that email exists, a password reset link has been sent.'
+        }), 200
+    
+    except ValueError as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+    except Exception as e:
+        logger.error(f"Error requesting password reset: {e}", exc_info=True)
+        return jsonify({
+            'success': False,
+            'error': 'An error occurred. Please try again later.'
+        }), 500
+
+
+@api_bp.route('/password-reset/confirm', methods=['POST'])
+@db_session_required
+def confirm_password_reset():
+    """Confirm password reset - validates token and resets password."""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({
+                'success': False,
+                'error': 'Request body is required'
+            }), 400
+        
+        # Validate input
+        validated_data = AccountSchema.validate_password_reset_confirm(data)
+        
+        # Reset password via service
+        db = get_db()
+        account = AccountService.reset_password(
+            db, 
+            validated_data['token'], 
+            validated_data['password']
+        )
+        
+        account_data = AccountSchema.serialize(account)
+        
+        return jsonify({
+            'success': True,
+            'data': account_data,
+            'message': 'Password has been reset successfully'
+        }), 200
+    
+    except ValidationError as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+    except ValueError as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+    except Exception as e:
+        logger.error(f"Error confirming password reset: {e}", exc_info=True)
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
+@api_bp.route('/accounts/password', methods=['PUT'])
+@auth_required
+@db_session_required
+def update_password():
+    """Update account password - requires authentication and current password verification."""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({
+                'success': False,
+                'error': 'Request body is required'
+            }), 400
+        
+        # Validate input
+        validated_data = AccountSchema.validate_password_update(data)
+        
+        # Get current account ID from authenticated token
+        account_id = get_current_account_id()
+        if not account_id:
+            return jsonify({
+                'success': False,
+                'error': 'Authentication required'
+            }), 401
+        
+        # Update password via service
+        db = get_db()
+        account = AccountService.update_password(
+            db,
+            account_id,
+            validated_data['current_password'],
+            validated_data['new_password']
+        )
+        
+        logger.info(f"Password updated successfully for account: {account_id}")
+        return jsonify({
+            'success': True,
+            'message': 'Password updated successfully'
+        }), 200
+    
+    except ValidationError as e:
+        logger.warning(f"Password update validation error: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+    except ValueError as e:
+        logger.warning(f"Password update validation error: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+    except Exception as e:
+        logger.error(f"Error updating password: {e}", exc_info=True)
         return jsonify({
             'success': False,
             'error': str(e)

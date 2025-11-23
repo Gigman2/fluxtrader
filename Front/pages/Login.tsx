@@ -72,6 +72,7 @@ const Login: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
               showForgotPassword
+              forgotPasswordLink="/forgot-password"
             />
 
             <ErrorAlert message={error || ""} />

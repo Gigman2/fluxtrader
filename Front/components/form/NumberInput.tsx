@@ -40,16 +40,19 @@ const NumberInput: React.FC<NumberInputProps> = ({
         )}
         <input
           type="number"
-          value={value}
-          onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
+          value={value ?? ""}
+          onChange={(e) => {
+            const numValue = parseFloat(e.target.value);
+            onChange(isNaN(numValue) ? undefined : numValue);
+          }}
           placeholder={placeholder}
           required={required}
           step={step}
           min={min}
           max={max}
-          className={`block w-full ${
-            prefix ? "pl-7" : "pl-4"
-          } ${suffix ? "pr-12" : "pr-4"} py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-slate-500 outline-none text-slate-900 dark:text-white font-mono`}
+          className={`block w-full ${prefix ? "pl-7" : "pl-4"} ${
+            suffix ? "pr-12" : "pr-4"
+          } py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-slate-500 outline-none text-slate-900 dark:text-white font-mono`}
         />
         {suffix && (
           <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -62,4 +65,3 @@ const NumberInput: React.FC<NumberInputProps> = ({
 };
 
 export default NumberInput;
-

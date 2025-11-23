@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DollarSign } from "lucide-react";
 import { SettingsCard, SaveButton } from "@/components/settings";
 import { NumberInput } from "@/components/form";
@@ -7,9 +7,7 @@ import useAuth from "@/store/auth";
 import useMutationHandler from "@/api/mutation";
 import { ErrorAlert, SuccessAlert } from "../alerts";
 
-interface TradingTabProps {}
-
-const TradingTab: React.FC<TradingTabProps> = () => {
+const TradingTab: React.FC = () => {
   const [accountBalance, setAccountBalance] = useState<number>(0);
   const [riskPerTrade, setRiskPerTrade] = useState<number>(0);
   const [maxDrawdown, setMaxDrawdown] = useState<number>(0);
@@ -18,6 +16,16 @@ const TradingTab: React.FC<TradingTabProps> = () => {
   const { data: riskSettings, isLoading } = useGetRiskSettings({
     enabled: isLoggedIn,
   });
+
+  // Sync state with API data when it loads
+  useEffect(() => {
+    console.log("riskSettings", riskSettings);
+    if (riskSettings) {
+      setAccountBalance(riskSettings.account_balance);
+      setRiskPerTrade(riskSettings.risk_per_trade);
+      setMaxDrawdown(riskSettings.max_drawdown);
+    }
+  }, [riskSettings]);
 
   const { mutate: updateRiskSettings, isPending: isUpdatingRiskSettings } =
     useMutationHandler("risk/settings", {
@@ -40,6 +48,8 @@ const TradingTab: React.FC<TradingTabProps> = () => {
     });
 
   const handleSave = () => {
+    if (isUpdatingRiskSettings || isLoading) return;
+
     updateRiskSettings({
       account_balance: accountBalance,
       risk_per_trade: riskPerTrade,
@@ -57,11 +67,10 @@ const TradingTab: React.FC<TradingTabProps> = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <NumberInput
             label="Account Balance (USD)"
-            value={riskSettings?.account_balance}
+            value={accountBalance}
             onChange={setAccountBalance}
             prefix="$"
-            min={0}
-            step="0.01"
+            placeholder="10000"
           />
 
           <NumberInput
@@ -69,9 +78,7 @@ const TradingTab: React.FC<TradingTabProps> = () => {
             value={riskPerTrade}
             onChange={setRiskPerTrade}
             suffix="%"
-            min={0}
-            max={100}
-            step="0.1"
+            placeholder="1.5"
           />
         </div>
 
@@ -99,15 +106,16 @@ const TradingTab: React.FC<TradingTabProps> = () => {
               />
             </div>
           </div>
+
+          <div className="flex justify-end mt-6">
+            <SaveButton
+              onClick={handleSave}
+              isLoading={isUpdatingRiskSettings || isLoading}
+              disabled={isUpdatingRiskSettings || isLoading}
+            />
+          </div>
         </div>
       </SettingsCard>
-
-      <div className="flex justify-end">
-        <SaveButton
-          onClick={handleSave}
-          isLoading={isUpdatingRiskSettings || isLoading}
-        />
-      </div>
     </div>
   );
 };

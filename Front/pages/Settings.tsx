@@ -12,12 +12,6 @@ type TabId = "trading" | "integrations" | "security";
 const Settings: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabId>("trading");
 
-  // Trading states
-  const [accountBalance, setAccountBalance] = useState(10000);
-  const [riskPerTrade, setRiskPerTrade] = useState(1.5);
-  const [maxDrawdown, setMaxDrawdown] = useState(5);
-  const [isSaving, setIsSaving] = useState(false);
-
   // Integration states
   const [mtStatus, setMtStatus] = useState<"connected" | "disconnected">(
     "disconnected"
@@ -38,14 +32,6 @@ const Settings: React.FC = () => {
     },
     { id: "security", label: "Security", icon: <Shield size={18} /> },
   ];
-
-  const handleSaveRiskSettings = () => {
-    setIsSaving(true);
-    // TODO: Implement API call to save risk settings
-    setTimeout(() => {
-      setIsSaving(false);
-    }, 1000);
-  };
 
   const handleTelegramConnect = () => {
     setTelegramStatus("connected");
@@ -97,18 +83,7 @@ const Settings: React.FC = () => {
 
         {/* Content Area */}
         <div className="lg:col-span-3">
-          {activeTab === "trading" && (
-            <TradingTab
-              accountBalance={accountBalance}
-              riskPerTrade={riskPerTrade}
-              maxDrawdown={maxDrawdown}
-              onAccountBalanceChange={setAccountBalance}
-              onRiskPerTradeChange={setRiskPerTrade}
-              onMaxDrawdownChange={setMaxDrawdown}
-              onSave={handleSaveRiskSettings}
-              isLoading={isSaving}
-            />
-          )}
+          {activeTab === "trading" && <TradingTab />}
           {activeTab === "integrations" && (
             <IntegrationsTab
               telegramStatus={telegramStatus}

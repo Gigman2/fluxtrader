@@ -13,9 +13,11 @@ class Account(Base):
     
     Attributes:
         id: Unique account identifier (UUID)
-        name: Account name
         username: Account username
+        email: Account email
         password: Account password
+        reset_token: Password reset token (temporary)
+        reset_token_expires_at: Password reset token expiration
         account_balance: Account balance
         risk_per_trade: Risk per trade
         max_drawdown: Max drawdown
@@ -31,7 +33,12 @@ class Account(Base):
     
     # account information
     username = Column(String(255), nullable=False, unique=True)
+    email = Column(String(255), nullable=False, unique=True)
     password = Column(String(255), nullable=False)
+
+    # password reset fields
+    reset_token = Column(String(255), nullable=True)
+    reset_token_expires_at = Column(DateTime(timezone=True), nullable=True)
 
     # trade parameters
     account_balance = Column(Numeric(20, 8), nullable=True, default=0.0)

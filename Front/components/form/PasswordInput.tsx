@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Lock } from "lucide-react";
 
 interface PasswordInputProps {
@@ -25,6 +26,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
   className = "",
 }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className={className}>
@@ -33,12 +35,19 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
           {label}
         </label>
         {showForgotPassword && (
-          <a
-            href={forgotPasswordLink}
+          <button
+            type="button"
+            onClick={() => {
+              if (forgotPasswordLink.startsWith("/")) {
+                navigate(forgotPasswordLink);
+              } else {
+                window.location.href = forgotPasswordLink;
+              }
+            }}
             className="text-xs font-medium text-slate-900 dark:text-white hover:underline"
           >
             Forgot Password?
-          </a>
+          </button>
         )}
       </div>
       <div className="relative">

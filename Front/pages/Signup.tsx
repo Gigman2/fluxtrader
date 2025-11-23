@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, CheckCircle2 } from "lucide-react";
+import { User, CheckCircle2, Mail } from "lucide-react";
 import useMutationHandler from "@/api/mutation";
 import {
   AuthLayout,
@@ -16,6 +16,7 @@ import useAuth from "@/store/auth";
 
 const Signup: React.FC = () => {
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const { setSession } = useAuth(["setSession"]);
@@ -40,6 +41,7 @@ const Signup: React.FC = () => {
 
     signup({
       username: name,
+      email,
       password,
     });
   };
@@ -79,6 +81,16 @@ const Signup: React.FC = () => {
               placeholder="John Doe"
               required
               icon={User}
+            />
+
+            <FormInput
+              label="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="john.doe@example.com"
+              required
+              icon={Mail}
             />
 
             <PasswordInput

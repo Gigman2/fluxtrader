@@ -15,12 +15,20 @@ class AccountSchema:
         
         Automatically hashes the password before returning.
         """
-        required_fields = ['username', 'password']
+        required_fields = ['username', 'email', 'password']
         missing = [field for field in required_fields if field not in data]
         if missing:
             raise ValueError(f"Missing required fields: {', '.join(missing)}")
         
         # Validate password strength (optional but recommended)
+        email = str(data['email']).strip()
+        if not email:
+            raise ValueError("Email cannot be empty")
+
+        # validate email format
+        if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
+            raise ValueError("Invalid email address")
+
         password = str(data['password'])
         if len(password) < 8:
             raise ValueError("Password must be at least 8 characters long")
@@ -40,6 +48,7 @@ class AccountSchema:
         
         return {
             'username': username,
+            'email': email,
             'password': hashed_password,  # Store hashed password, not plain text
         }
     
@@ -83,11 +92,106 @@ class AccountSchema:
 
 
     @staticmethod
+    def validate_password_reset_request(data: dict) -> dict:
+        """
+        Validate password reset request data.
+        
+        Args:
+            data: Dictionary with 'email' field
+            
+        Returns:
+            Validated dictionary with email
+            
+        Raises:
+            ValueError: If validation fails
+        """
+        if 'email' not in data:
+            raise ValueError("Email is required")
+        
+        email = str(data['email']).strip()
+        if not email:
+            raise ValueError("Email cannot be empty")
+        
+        # Validate email format
+        if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
+            raise ValueError("Invalid email address")
+        
+        return {'email': email}
+    
+    @staticmethod
+    def validate_password_reset_confirm(data: dict) -> dict:
+        """
+        Validate password reset confirmation data.
+        
+        Args:
+            data: Dictionary with 'token' and 'password' fields
+            
+        Returns:
+            Validated dictionary with token and password
+            
+        Raises:
+            ValueError: If validation fails
+        """
+        required_fields = ['token', 'password']
+        missing = [field for field in required_fields if field not in data]
+        if missing:
+            raise ValueError(f"Missing required fields: {', '.join(missing)}")
+        
+        token = str(data['token']).strip()
+        if not token:
+            raise ValueError("Reset token cannot be empty")
+        
+        password = str(data['password'])
+        if len(password) < 8:
+            raise ValueError("Password must be at least 8 characters long")
+        
+        return {
+            'token': token,
+            'password': password
+        }
+    
+    @staticmethod
+    def validate_password_update(data: dict) -> dict:
+        """
+        Validate password update data.
+        
+        Args:
+            data: Dictionary with 'current_password' and 'new_password' fields
+            
+        Returns:
+            Validated dictionary with current_password and new_password
+            
+        Raises:
+            ValueError: If validation fails
+        """
+        required_fields = ['current_password', 'new_password']
+        missing = [field for field in required_fields if field not in data]
+        if missing:
+            raise ValueError(f"Missing required fields: {', '.join(missing)}")
+        
+        current_password = str(data['current_password'])
+        if not current_password:
+            raise ValueError("Current password cannot be empty")
+        
+        new_password = str(data['new_password'])
+        if len(new_password) < 8:
+            raise ValueError("New password must be at least 8 characters long")
+        
+        if current_password == new_password:
+            raise ValueError("New password must be different from current password")
+        
+        return {
+            'current_password': current_password,
+            'new_password': new_password
+        }
+
+    @staticmethod
     def serialize(account) -> dict:
         """Serialize Account model to dict."""
         return {
             'id': str(account.id),
             'username': account.username,
+            'email': account.email,
             'account_balance': float(account.account_balance),
             'risk_per_trade': float(account.risk_per_trade),
             'max_drawdown': float(account.max_drawdown),

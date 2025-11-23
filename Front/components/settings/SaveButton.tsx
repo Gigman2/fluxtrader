@@ -18,7 +18,14 @@ const SaveButton: React.FC<SaveButtonProps> = ({
     <button
       onClick={onClick}
       disabled={isLoading}
-      className={`flex items-center gap-2 px-6 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200 text-white rounded-lg font-medium transition-colors shadow-sm disabled:opacity-70 disabled:cursor-not-allowed ${className}`}
+      className={`
+        flex items-center justify-center gap-2 px-6 py-4 bg-slate-900 hover:bg-slate-800
+        dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200 text-white
+        rounded-lg font-medium transition-colors shadow-sm disabled:opacity-70
+        disabled:cursor-not-allowed w-full
+        ${isLoading ? "opacity-70 cursor-not-allowed" : ""} w-full
+        ${className}
+      `}
     >
       {isLoading ? (
         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -31,4 +38,3 @@ const SaveButton: React.FC<SaveButtonProps> = ({
 };
 
 export default SaveButton;
-
