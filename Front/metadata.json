@@ -1,0 +1,5 @@
+{
+  "name": "SignalFlux - Telegram Trading Bot",
+  "description": "A minimalist, high-performance dashboard for aggregating, parsing, and analyzing trading signals from Telegram channels.",
+  "requestFramePermissions": []
+}
