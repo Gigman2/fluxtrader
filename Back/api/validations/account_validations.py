@@ -81,29 +81,6 @@ class AccountSchema:
         
         return validated_data
 
-    
-    @staticmethod
-    def validate_account_balance(data: dict) -> dict:
-        """Validate account balance data."""
-        if not isinstance(data['account_balance'], (int, float)) or data['account_balance'] < 0:
-            raise ValueError("account_balance must be a positive number")
-        return data['account_balance']
-
-
-    @staticmethod
-    def validate_risk_per_trade(data: dict) -> dict:
-        """Validate risk per trade data."""
-        if not isinstance(data['risk_per_trade'], (int, float)) or not (0 < data['risk_per_trade'] <= 100):
-            raise ValueError("risk_per_trade must be between 0 and 100")
-        return data['risk_per_trade']
-
-
-    @staticmethod
-    def validate_max_drawdown(data: dict) -> dict:
-        """Validate max drawdown data."""
-        if not isinstance(data['max_drawdown'], (int, float)) or not (0 < data['max_drawdown'] <= 100):
-            raise ValueError("max_drawdown must be between 0 and 100")
-        return data['max_drawdown']
 
     @staticmethod
     def serialize(account) -> dict:

@@ -1,18 +1,12 @@
 import React, { useState } from "react";
 import { MOCK_SIGNALS, MOCK_CHANNELS } from "@/services/mockData";
-import { SignalStatus, SignalType } from "../types";
+import { SignalStatus } from "../types";
 import {
-  ArrowUpRight,
-  ArrowDownRight,
-  Clock,
   CheckCircle,
-  XCircle,
   AlertCircle,
-  Filter,
   ChevronDown,
   Zap,
   TrendingUp,
-  MoreHorizontal,
   RefreshCw,
 } from "lucide-react";
 import {
