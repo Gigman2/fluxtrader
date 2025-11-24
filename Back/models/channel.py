@@ -28,7 +28,6 @@ class Channel(Base):
     Attributes:
         id: Unique channel identifier (UUID)
         name: Channel name
-        description: Channel description
         telegram_channel_id: Telegram channel ID
         is_active: Whether channel is currently active
         signal_count: Number of signals from this channel
@@ -73,6 +72,9 @@ class Channel(Base):
     
     # Relationship back to Account
     account = relationship("Account", back_populates="channels")
+    
+    # Relationship to Templates
+    templates = relationship("Template", back_populates="channel", cascade="all, delete-orphan")
     
     def __repr__(self):
         """String representation of the Channel."""

@@ -46,7 +46,6 @@ class ChannelSchema:
             'id': str(channel.id),
             'account_id': str(channel.account_id) if channel.account_id else None,
             'name': channel.name,
-            'description': channel.description,
             'telegram_channel_id': channel.telegram_channel_id,
             'status': channel.status,
             'connection_status': channel.connection_status,

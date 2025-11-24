@@ -6,7 +6,7 @@ from sqlalchemy import pool
 from alembic import context
 
 from config.database_handler import Base
-from models import Channel, Account
+from models import Channel, Account, Template, ExtractionHistory
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

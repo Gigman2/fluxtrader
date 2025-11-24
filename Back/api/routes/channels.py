@@ -41,6 +41,7 @@ def list_account_channels():
             'count': len(channels)
         }), 200
     except Exception as e:
+        logger.error(f'Error fetching account channels: {e}')
         return jsonify({
             'success': False,
             'error': str(e)

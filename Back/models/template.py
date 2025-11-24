@@ -61,7 +61,7 @@ class ExtractionHistory(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     template_id = Column(UUID(as_uuid=True), ForeignKey("templates.id"), nullable=False)
-    signal_id = Column(UUID(as_uuid=True), ForeignKey("signals.id"), nullable=False)
+    # signal_id = Column(UUID(as_uuid=True), ForeignKey("signals.id"), nullable=False)
 
     # Extraction attempt details
     was_successful = Column(Boolean, default=True, nullable=False)
@@ -78,3 +78,9 @@ class ExtractionHistory(Base):
     def __repr__(self) -> str:
         """Return a string representation of the extraction history."""
         return f"<ExtractionHistory(id={self.id}, template_id={self.template_id}, success={self.was_successful})>"
+
+
+__all__ = [
+    "Template",
+    "ExtractionHistory",
+]
