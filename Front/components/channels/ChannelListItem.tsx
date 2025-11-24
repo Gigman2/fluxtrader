@@ -30,7 +30,9 @@ const ChannelListItem: React.FC<ChannelListItemProps> = ({ channel }) => {
           <h3 className="font-bold text-slate-900 dark:text-white text-sm">
             {channel.name}
           </h3>
-          <p className="text-xs text-slate-500 font-mono">{channel.username}</p>
+          <p className="text-xs text-slate-500 font-mono">
+            @{channel.telegram_channel_id}
+          </p>
         </div>
       </div>
 
@@ -38,13 +40,13 @@ const ChannelListItem: React.FC<ChannelListItemProps> = ({ channel }) => {
         <div className="hidden md:block text-right">
           <p className="text-xs text-slate-500 mb-0.5">Signals</p>
           <p className="text-sm font-medium text-slate-900 dark:text-white">
-            {channel.signalCount}
+            {channel.signal_count || 0}
           </p>
         </div>
         <div className="hidden md:block text-right">
           <p className="text-xs text-slate-500 mb-0.5">Last Active</p>
           <p className="text-sm font-medium text-slate-900 dark:text-white">
-            {channel.lastActive}
+            {channel.last_active_at || "not yet"}
           </p>
         </div>
         <div className="min-w-[100px] text-right">

@@ -5,11 +5,10 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-import getEnv from "@/utilities/envs";
+import getEnv from "@/utilities/envs.util";
+import { clean, toFormData, toQueryString } from "@/utilities/misc.util";
 
 const { VITE_BASE_API_URL } = getEnv();
-
-import { clean, toFormData, toQueryString } from "@/utilities/misc";
 
 import client, { generateHeaders } from "./axiosClient";
 import { customOptions } from "./query";

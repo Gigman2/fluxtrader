@@ -52,9 +52,9 @@ const Channels: React.FC = () => {
       ) : (
         <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
           <div className="divide-y divide-slate-200 dark:divide-slate-800">
-            {/* {filteredChannels.map((channel) => (
+            {filteredChannels.map((channel) => (
               <ChannelListItem key={channel.id} channel={channel} />
-            ))} */}
+            ))}
           </div>
         </div>
       )}

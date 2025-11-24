@@ -1,10 +1,9 @@
 import { isAxiosError } from "axios";
 
-import getEnv from "@/utilities/envs";
+import getEnv from "@/utilities/envs.util";
+import { clean, toQueryString } from "@/utilities/misc.util";
 
 const { VITE_BASE_API_URL } = getEnv();
-
-import { clean, toQueryString } from "@/utilities/misc";
 
 import client, { generateHeaders } from "./axiosClient";
 
@@ -24,7 +23,7 @@ async function fetchData<T>({
   const options = clean({
     method: "GET",
     url: `${BASE_URL}${url}${queryString}`,
-    headers: generateHeaders(!!authenticate, queryOptions.contentType),
+    headers: generateHeaders(!!authenticate, queryOptions.contentType, "GET"),
   }) as Record<PropertyKey, unknown>;
 
   try {

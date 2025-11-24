@@ -3,3 +3,4 @@ export * from "./alerts";
 export * from "./form";
 export * from "./settings";
 export * from "./channels";
+export { default as ConfirmationModal } from "./ConfirmationModal";

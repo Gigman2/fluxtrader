@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { MOCK_SIGNALS, MOCK_TEMPLATES } from "@/services/mockData";
-import { BarChart2, Clock, Target, Zap, Activity } from "lucide-react";
-import { Template } from "@/types";
+import { MOCK_SIGNALS } from "@/services/mockData";
+import { BarChart2, Clock, Target, Zap } from "lucide-react";
 import { useGetSingleChannel } from "@/services/channel.service";
 import {
   ChannelDetailsHeader,
@@ -16,7 +15,6 @@ import {
 
 const ChannelDetails: React.FC = () => {
   const { id } = useParams();
-  const [templates, setTemplates] = useState<Template[]>([]);
   const [timeRange, setTimeRange] = useState("Last 7 Days");
 
   const signals = MOCK_SIGNALS.filter((s) => s.channelId === id);
@@ -27,20 +25,6 @@ const ChannelDetails: React.FC = () => {
       enabled: !!id,
     }
   );
-
-  useEffect(() => {
-    if (id) {
-      setTemplates(MOCK_TEMPLATES.filter((t) => t.channelId === id));
-    }
-  }, [id]);
-
-  const toggleTemplateAutoDetect = (templateId: string) => {
-    setTemplates((prev) =>
-      prev.map((t) =>
-        t.id === templateId ? { ...t, isAutoDetect: !t.isAutoDetect } : t
-      )
-    );
-  };
 
   // Mock Performance Data
   const performanceData = [
@@ -116,10 +100,7 @@ const ChannelDetails: React.FC = () => {
 
         {/* Sidebar: Templates & Metadata */}
         <div className="space-y-6">
-          <TemplatesList
-            templates={templates}
-            onToggleAutoDetect={toggleTemplateAutoDetect}
-          />
+          <TemplatesList channelId={id} />
           <ChannelMetadataCard
             addedOn={channel.created_at}
             sourceId={(channel as any).telegram_channel_id}

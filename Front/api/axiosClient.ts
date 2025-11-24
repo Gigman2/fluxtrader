@@ -17,12 +17,13 @@ export function generateHeaders(
   const headers: Record<string, unknown> = {};
 
   const ContentType = "Content-Type";
+  // Only set Content-Type for non-GET requests or when explicitly provided
+  // GET requests don't need Content-Type and setting it can trigger unnecessary CORS preflight
   if (contentType === "" || !contentType) {
-    if (method === "get") {
-      headers[ContentType] = "application/json";
-    } else {
+    if (method && method.toLowerCase() !== "get") {
       headers[ContentType] = "application/x-www-form-urlencoded";
     }
+    // Don't set Content-Type for GET requests
   } else if (contentType === "form-data") {
     headers[ContentType] = "multipart/form-data";
   } else if (contentType?.length) {

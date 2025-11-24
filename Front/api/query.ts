@@ -44,13 +44,22 @@ function useGet<T>(
     options;
 
   const url = id ? urlTemplate.replace(":id", id) : urlTemplate;
-  const queryKey = [url, queryParams, ...(options.queryKey || [])];
+
+  // React Query cache key - includes custom queryKey if provided, plus url and queryParams
+  // This ensures proper cache invalidation and uniqueness
+  const reactQueryKey = options.queryKey
+    ? [...options.queryKey, url, queryParams]
+    : [url, queryParams];
+
+  // For the actual HTTP request, fetchData expects [url, queryParams] format
+  const requestKey = [url, queryParams];
 
   const queryResult = useQuery<T, unknown>({
-    queryKey,
-    queryFn: async (context) => {
+    queryKey: reactQueryKey,
+    queryFn: async () => {
+      // Always pass [url, queryParams] to fetchData, regardless of React Query's cache key
       return fetchData<T>({
-        queryKey: context.queryKey,
+        queryKey: requestKey,
         authenticate: restOptions.authenticate,
         contentType: restOptions.contentType,
       });
