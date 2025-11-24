@@ -75,6 +75,9 @@ class Channel(Base):
     
     # Relationship to Templates
     templates = relationship("Template", back_populates="channel", cascade="all, delete-orphan")
+
+    # Relationship to Signals
+    signals = relationship("Signal", back_populates="channel", cascade="all, delete-orphan")
     
     def __repr__(self):
         """String representation of the Channel."""
