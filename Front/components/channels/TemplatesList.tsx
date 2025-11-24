@@ -135,6 +135,7 @@ const TemplatesList: React.FC<TemplatesListProps> = ({ channelId }) => {
                 template={template}
                 onDelete={handleDeleteClick}
                 isDeleting={deletingTemplateId === template.id}
+                channelId={channelId}
               />
             ))
           ) : (
