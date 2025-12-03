@@ -11,6 +11,7 @@ from api.routes import risk
 from api.routes import market_data
 from api.routes import channels
 from api.routes import templates
+from api.routes import signals
 
 __all__ = ["api_bp"]
 

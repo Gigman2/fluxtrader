@@ -74,7 +74,8 @@ class ExtractionHistory(Base):
 
     # Relationships
     template = relationship("Template", back_populates="extraction_history")
-    signal = relationship("Signal", back_populates="extraction_history")
+    # Note: signal relationship removed - signal_id column is commented out
+    # If needed in the future, uncomment signal_id column and add back relationship
 
     def __repr__(self) -> str:
         """Return a string representation of the extraction history."""

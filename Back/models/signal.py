@@ -35,7 +35,6 @@ class Signal(Base):
     # Confidence & Metadata
     confidence_score = Column(Numeric(3, 2), default=1.0, nullable=False)
     extraction_metadata = Column(JSON, nullable=True)
-    risk_reward_ratio = Column(Numeric(5, 2), nullable=True)
 
     # Tracking timestamps
     created_at = Column(DateTime(timezone=True), default=datetime.now(timezone.utc), 
@@ -60,31 +59,3 @@ class Signal(Base):
             f"<Signal(id={self.id}, symbol={self.symbol}, "
             f"entry={self.entry_price}, type={self.signal_type})>"
         )
-
-    def get_risk_reward_ratio(self) -> Decimal:
-        """Calculate risk/reward ratio for this signal."""
-        if not self.take_profits or self.stop_loss is None:
-            return Decimal(0)
-        
-        entry = Decimal(str(self.entry_price))
-        sl = Decimal(str(self.stop_loss.get("price", entry)))
-        
-        if self.signal_type == "BUY":
-            risk = entry - sl
-            if self.take_profits:
-                tp = Decimal(str(self.take_profits[0].get("price", entry)))
-                reward = tp - entry
-            else:
-                return Decimal(0)
-        else:  # SELL
-            risk = sl - entry
-            if self.take_profits:
-                tp = Decimal(str(self.take_profits[0].get("price", entry)))
-                reward = entry - tp
-            else:
-                return Decimal(0)
-        
-        if risk == 0:
-            return Decimal(0)
-        
-        return (reward / risk).quantize(Decimal("0.01"))

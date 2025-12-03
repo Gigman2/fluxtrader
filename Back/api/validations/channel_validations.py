@@ -20,7 +20,6 @@ class ChannelSchema:
         
         result = {
             'name': str(data['name']),
-            'description': data.get('description'),
             'telegram_channel_id': str(data['telegram_channel_id']),
             'status': data.get('status', STATUS_ACTIVE),
             'connection_status': data.get('connection_status', "disconnected"),
